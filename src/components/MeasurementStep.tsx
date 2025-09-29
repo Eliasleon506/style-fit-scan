@@ -4,30 +4,38 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Ruler, Info } from "lucide-react";
 
-// Video URLs for measurement tutorials
-const measurementVideos: Record<string, string> = {
+// Video URLs for suit measurement tutorials
+const suitMeasurementVideos: Record<string, string> = {
   height: "https://www.youtube.com/embed/aK6D3PcJjNo",
-  neck: "https://www.youtube.com/embed/R6N6PDWKLns?start=381",
-  chest: "https://www.youtube.com/embed/dyT3576fntY",
-  waist: "https://www.youtube.com/embed/wIels92nzeM?start=45",
-  hips: "https://www.youtube.com/embed/wIels92nzeM?start=75",
-  shoulder: "https://www.youtube.com/embed/R6N6PDWKLns?start=320",
-  sleeve: "https://www.youtube.com/embed/R6N6PDWKLns?start=384",
-  bicep: "https://www.youtube.com/embed/R6N6PDWKLns?start=458",
-  wrist: "https://www.youtube.com/embed/kh3LWlsTPKM",
-  jacket_length: "https://www.youtube.com/embed/lUMrOIByHdE",
-  inseam: "https://www.youtube.com/embed/F01wQQxhzYs",
-  outseam: "https://www.youtube.com/embed/F01wQQxhzYs",
-  thigh: "https://www.youtube.com/embed/R6N6PDWKLns?start=457",
-  bust: "https://www.youtube.com/embed/R6N6PDWKLns?start=109",
-  under_bust: "https://www.youtube.com/embed/R6N6PDWKLns?start=118",
-  armpit_to_floor: "https://www.youtube.com/embed/kh3LWlsTPKM",
-  waist_to_floor: "https://www.youtube.com/embed/kh3LWlsTPKM",
-  shoulder_to_floor: "https://www.youtube.com/embed/kh3LWlsTPKM",
+  neck: "https://www.youtube.com/embed/F01wQQxhzYs?start=180",
+  chest: "https://www.youtube.com/embed/F01wQQxhzYs?start=90",
+  waist: "https://www.youtube.com/embed/F01wQQxhzYs?start=120",
+  hips: "https://www.youtube.com/embed/F01wQQxhzYs?start=150",
+  shoulder: "https://www.youtube.com/embed/dyT3576fntY?start=240",
+  sleeve: "https://www.youtube.com/embed/Q5zLB8xM-_0",
+  bicep: "https://www.youtube.com/embed/dyT3576fntY?start=380",
+  wrist: "https://www.youtube.com/embed/dyT3576fntY?start=420",
+  jacket_length: "https://www.youtube.com/embed/F01wQQxhzYs?start=210",
+  inseam: "https://www.youtube.com/embed/F01wQQxhzYs?start=240",
+  outseam: "https://www.youtube.com/embed/F01wQQxhzYs?start=270",
+  thigh: "https://www.youtube.com/embed/F01wQQxhzYs?start=260",
 };
 
-const getVideoUrl = (measurementId: string): string => {
-  return measurementVideos[measurementId] || measurementVideos.height;
+// Video URLs for dress measurement tutorials
+const dressMeasurementVideos: Record<string, string> = {
+  height: "https://www.youtube.com/embed/aK6D3PcJjNo",
+  bust: "https://www.youtube.com/embed/R6N6PDWKLns?start=109",
+  under_bust: "https://www.youtube.com/embed/R6N6PDWKLns?start=118",
+  waist: "https://www.youtube.com/embed/wIels92nzeM?start=45",
+  hips: "https://www.youtube.com/embed/wIels92nzeM?start=75",
+  armpit_to_floor: "https://www.youtube.com/embed/kh3LWlsTPKM?start=180",
+  waist_to_floor: "https://www.youtube.com/embed/kh3LWlsTPKM?start=240",
+  shoulder_to_floor: "https://www.youtube.com/embed/kh3LWlsTPKM?start=120",
+};
+
+const getVideoUrl = (measurementId: string, type: 'suit' | 'dress'): string => {
+  const videos = type === 'suit' ? suitMeasurementVideos : dressMeasurementVideos;
+  return videos[measurementId] || suitMeasurementVideos.height;
 };
 
 interface MeasurementStepProps {
@@ -42,6 +50,7 @@ interface MeasurementStepProps {
   onValueChange: (value: string) => void;
   onUnitChange: (unit: 'cm' | 'in') => void;
   compact?: boolean;
+  type: 'suit' | 'dress';
 }
 
 export const MeasurementStep = ({
@@ -51,6 +60,7 @@ export const MeasurementStep = ({
   onValueChange,
   onUnitChange,
   compact = false,
+  type,
 }: MeasurementStepProps) => {
   return (
     <div className={compact ? "space-y-4" : "space-y-6"}>
@@ -142,7 +152,7 @@ export const MeasurementStep = ({
               <iframe
                 width="100%"
                 height="100%"
-                src={getVideoUrl(measurement.id)}
+                src={getVideoUrl(measurement.id, type)}
                 title={`How to measure ${measurement.label}`}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
