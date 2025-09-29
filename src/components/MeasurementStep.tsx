@@ -4,6 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Ruler, Info } from "lucide-react";
 
+// Video URLs for measurement tutorials
+const measurementVideos: Record<string, string> = {
+  height: "https://www.youtube.com/embed/YQaGayH4v_E",
+  neck: "https://www.youtube.com/embed/YQaGayH4v_E", 
+  chest: "https://www.youtube.com/embed/YQaGayH4v_E",
+  waist: "https://www.youtube.com/embed/YQaGayH4v_E",
+  hips: "https://www.youtube.com/embed/YQaGayH4v_E",
+  shoulder: "https://www.youtube.com/embed/YQaGayH4v_E",
+  sleeve: "https://www.youtube.com/embed/YQaGayH4v_E",
+  bicep: "https://www.youtube.com/embed/YQaGayH4v_E",
+  wrist: "https://www.youtube.com/embed/YQaGayH4v_E",
+  jacket_length: "https://www.youtube.com/embed/YQaGayH4v_E",
+  inseam: "https://www.youtube.com/embed/YQaGayH4v_E",
+  outseam: "https://www.youtube.com/embed/YQaGayH4v_E",
+  thigh: "https://www.youtube.com/embed/YQaGayH4v_E",
+  bust: "https://www.youtube.com/embed/p-dSzYE9YB0",
+  under_bust: "https://www.youtube.com/embed/p-dSzYE9YB0",
+  armpit_to_floor: "https://www.youtube.com/embed/p-dSzYE9YB0",
+  waist_to_floor: "https://www.youtube.com/embed/p-dSzYE9YB0",
+  shoulder_to_floor: "https://www.youtube.com/embed/p-dSzYE9YB0",
+};
+
+const getVideoUrl = (measurementId: string): string => {
+  return measurementVideos[measurementId] || measurementVideos.height;
+};
+
 interface MeasurementStepProps {
   measurement: {
     id: string;
@@ -101,14 +127,25 @@ export const MeasurementStep = ({
         )}
       </div>
 
-      {/* Visual Helper */}
+      {/* Video Helper */}
       <div className="text-center">
-        <div className="w-32 h-48 bg-muted/30 rounded-lg border-2 border-dashed border-primary/30 mx-auto flex items-center justify-center">
-          <div className="text-center">
-            <Ruler className="h-8 w-8 text-primary/50 mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">Visual guide</p>
-            <p className="text-xs text-muted-foreground">(Coming soon)</p>
+        <h3 className="text-lg font-medium mb-4">How to measure: {measurement.label}</h3>
+        <div className="w-full max-w-md mx-auto">
+          <div className="aspect-video bg-muted/30 rounded-lg overflow-hidden border border-primary/20">
+            <iframe
+              width="100%"
+              height="100%"
+              src={getVideoUrl(measurement.id)}
+              title={`How to measure ${measurement.label}`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
           </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            Watch this quick tutorial for accurate measurement
+          </p>
         </div>
       </div>
     </div>
