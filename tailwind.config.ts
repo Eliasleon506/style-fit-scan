@@ -57,6 +57,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Custom craft colors for the tailor theme
+        craft: {
+          gold: "hsl(var(--craft-gold))",
+          "gold-light": "hsl(var(--craft-gold-light))",
+          charcoal: "hsl(var(--craft-charcoal))",
+          linen: "hsl(var(--craft-linen))",
+          "linen-dark": "hsl(var(--craft-linen-dark))",
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'soft': 'var(--shadow-soft)',
+        'medium': 'var(--shadow-medium)',
+        'gold': 'var(--shadow-gold)',
       },
       borderRadius: {
         lg: "var(--radius)",
