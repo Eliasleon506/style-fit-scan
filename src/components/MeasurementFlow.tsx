@@ -130,7 +130,7 @@ export const MeasurementFlow = ({ type, onBack }: MeasurementFlowProps) => {
                       unit={unit}
                       onValueChange={(value) => handleMeasurementUpdate(measurement.id, value)}
                       onUnitChange={setUnit}
-                      compact={true}
+                      compact={false}
                     />
                   </div>
                 ))}
