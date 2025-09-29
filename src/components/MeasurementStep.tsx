@@ -41,6 +41,7 @@ interface MeasurementStepProps {
   unit: 'cm' | 'in';
   onValueChange: (value: string) => void;
   onUnitChange: (unit: 'cm' | 'in') => void;
+  compact?: boolean;
 }
 
 export const MeasurementStep = ({
@@ -49,16 +50,21 @@ export const MeasurementStep = ({
   unit,
   onValueChange,
   onUnitChange,
+  compact = false,
 }: MeasurementStepProps) => {
   return (
-    <div className="space-y-6">
+    <div className={compact ? "space-y-4" : "space-y-6"}>
       {/* Measurement Header */}
-      <div className="text-center">
-        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Ruler className="h-8 w-8 text-primary" />
-        </div>
-        <h2 className="text-3xl font-bold mb-2">{measurement.label}</h2>
-        <p className="text-lg text-muted-foreground capitalize">
+      <div className={compact ? "text-left" : "text-center"}>
+        {!compact && (
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Ruler className="h-8 w-8 text-primary" />
+          </div>
+        )}
+        <h2 className={compact ? "text-2xl font-bold mb-2" : "text-3xl font-bold mb-2"}>
+          {measurement.label}
+        </h2>
+        <p className={compact ? "text-base text-muted-foreground capitalize" : "text-lg text-muted-foreground capitalize"}>
           {measurement.category} measurement
         </p>
       </div>
@@ -128,26 +134,28 @@ export const MeasurementStep = ({
       </div>
 
       {/* Video Helper */}
-      <div className="text-center">
-        <h3 className="text-lg font-medium mb-4">How to measure: {measurement.label}</h3>
-        <div className="w-full max-w-md mx-auto">
-          <div className="aspect-video bg-muted/30 rounded-lg overflow-hidden border border-primary/20">
-            <iframe
-              width="100%"
-              height="100%"
-              src={getVideoUrl(measurement.id)}
-              title={`How to measure ${measurement.label}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            />
+      {!compact && (
+        <div className="text-center">
+          <h3 className="text-lg font-medium mb-4">How to measure: {measurement.label}</h3>
+          <div className="w-full max-w-md mx-auto">
+            <div className="aspect-video bg-muted/30 rounded-lg overflow-hidden border border-primary/20">
+              <iframe
+                width="100%"
+                height="100%"
+                src={getVideoUrl(measurement.id)}
+                title={`How to measure ${measurement.label}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Watch this quick tutorial for accurate measurement
+            </p>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            Watch this quick tutorial for accurate measurement
-          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 };

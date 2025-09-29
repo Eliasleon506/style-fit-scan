@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { MeasurementStep } from "./MeasurementStep";
 import { StyleSelection } from "./StyleSelection";
@@ -49,14 +50,14 @@ const dressMeasurements = [
 ];
 
 export const MeasurementFlow = ({ type, onBack }: MeasurementFlowProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentView, setCurrentView] = useState<'measurements' | 'styles' | 'review'>('measurements');
   const [measurements, setMeasurements] = useState<Record<string, Measurement>>({});
   const [unit, setUnit] = useState<'cm' | 'in'>('cm');
   const [selectedStyles, setSelectedStyles] = useState<any>({});
 
   const measurementList = type === 'suit' ? suitMeasurements : dressMeasurements;
-  const totalSteps = measurementList.length + 2; // measurements + style selection + review
-  const progress = (currentStep / totalSteps) * 100;
+  const completedMeasurements = Object.keys(measurements).filter(id => measurements[id]?.value?.trim()).length;
+  const progress = (completedMeasurements / measurementList.length) * 100;
 
   const handleMeasurementUpdate = (measurementId: string, value: string) => {
     const measurementDef = measurementList.find(m => m.id === measurementId);
@@ -75,65 +76,120 @@ export const MeasurementFlow = ({ type, onBack }: MeasurementFlowProps) => {
     }
   };
 
-  const handleNext = () => {
-    if (currentStep < totalSteps - 1) {
-      setCurrentStep(currentStep + 1);
+  const handleContinueToStyles = () => {
+    setCurrentView('styles');
+  };
+
+  const handleContinueToReview = () => {
+    setCurrentView('review');
+  };
+
+  const isAllMeasurementsComplete = () => {
+    return measurementList.every(measurement => 
+      measurements[measurement.id]?.value && measurements[measurement.id]?.value.trim() !== ''
+    );
+  };
+
+  const getViewTitle = () => {
+    switch (currentView) {
+      case 'measurements':
+        return 'Enter Your Measurements';
+      case 'styles':
+        return 'Choose Your Style';
+      case 'review':
+        return 'Review & Download';
+      default:
+        return 'Enter Your Measurements';
     }
   };
 
-  const handlePrev = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const isStepComplete = () => {
-    if (currentStep < measurementList.length) {
-      const currentMeasurement = measurementList[currentStep];
-      return measurements[currentMeasurement.id]?.value && measurements[currentMeasurement.id]?.value.trim() !== '';
-    }
-    return true;
-  };
-
-  const renderCurrentStep = () => {
-    if (currentStep < measurementList.length) {
-      const measurement = measurementList[currentStep];
-      return (
-        <MeasurementStep
-          measurement={measurement}
-          value={measurements[measurement.id]?.value || ''}
-          unit={unit}
-          onValueChange={(value) => handleMeasurementUpdate(measurement.id, value)}
-          onUnitChange={setUnit}
-        />
-      );
-    } else if (currentStep === measurementList.length) {
-      return (
-        <StyleSelection
-          type={type}
-          selectedStyles={selectedStyles}
-          onStyleChange={setSelectedStyles}
-        />
-      );
-    } else {
-      return (
-        <MeasurementReview
-          type={type}
-          measurements={measurements}
-          selectedStyles={selectedStyles}
-          onBack={onBack}
-        />
-      );
-    }
-  };
-
-  const getStepTitle = () => {
-    if (currentStep < measurementList.length) {
-      return `Measurement ${currentStep + 1} of ${measurementList.length}`;
-    } else if (currentStep === measurementList.length) {
-      return 'Choose Your Style';
-    } else {
-      return 'Review & Download';
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'measurements':
+        return (
+          <div className="space-y-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4">Take Your Measurements</h2>
+              <p className="text-lg text-muted-foreground">
+                Scroll through each measurement below. Take your time for accuracy.
+              </p>
+            </div>
+            
+            <ScrollArea className="h-[70vh]">
+              <div className="space-y-12 pr-4">
+                {measurementList.map((measurement, index) => (
+                  <div key={measurement.id} className="border-b border-border/50 pb-12 last:border-b-0">
+                    <div className="mb-4">
+                      <span className="text-sm font-medium text-primary">
+                        {index + 1} of {measurementList.length}
+                      </span>
+                    </div>
+                    <MeasurementStep
+                      measurement={measurement}
+                      value={measurements[measurement.id]?.value || ''}
+                      unit={unit}
+                      onValueChange={(value) => handleMeasurementUpdate(measurement.id, value)}
+                      onUnitChange={setUnit}
+                      compact={true}
+                    />
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+            
+            <div className="flex justify-end mt-8">
+              <Button
+                onClick={handleContinueToStyles}
+                disabled={!isAllMeasurementsComplete()}
+                className="bg-primary hover:bg-primary/90"
+                size="lg"
+              >
+                Continue to Style Selection
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        );
+      
+      case 'styles':
+        return (
+          <div>
+            <StyleSelection
+              type={type}
+              selectedStyles={selectedStyles}
+              onStyleChange={setSelectedStyles}
+            />
+            <div className="flex justify-between mt-8">
+              <Button
+                variant="outline"
+                onClick={() => setCurrentView('measurements')}
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Measurements
+              </Button>
+              <Button
+                onClick={handleContinueToReview}
+                className="bg-primary hover:bg-primary/90"
+              >
+                Continue to Review
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        );
+      
+      case 'review':
+        return (
+          <MeasurementReview
+            type={type}
+            measurements={measurements}
+            selectedStyles={selectedStyles}
+            onBack={() => setCurrentView('styles')}
+          />
+        );
+      
+      default:
+        return null;
     }
   };
 
@@ -147,49 +203,33 @@ export const MeasurementFlow = ({ type, onBack }: MeasurementFlowProps) => {
           </Button>
           <div className="flex-1">
             <h1 className="text-2xl font-bold">
-              {type === 'suit' ? "Men's Suit" : "Women's Dress"} Measurements
+              {type === 'suit' ? "Men's Suit" : "Women's Dress"} {getViewTitle()}
             </h1>
-            <p className="text-muted-foreground">{getStepTitle()}</p>
+            {currentView === 'measurements' && (
+              <p className="text-muted-foreground">
+                {completedMeasurements} of {measurementList.length} measurements completed
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex justify-between text-sm text-muted-foreground mb-2">
-            <span>Progress</span>
-            <span>{Math.round(progress)}%</span>
+        {/* Progress - only show for measurements */}
+        {currentView === 'measurements' && (
+          <div className="mb-8">
+            <div className="flex justify-between text-sm text-muted-foreground mb-2">
+              <span>Measurements Progress</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
           </div>
-          <Progress value={progress} className="h-2" />
-        </div>
+        )}
 
         {/* Content */}
         <Card className="craft-section">
           <CardContent className="p-8">
-            {renderCurrentStep()}
+            {renderCurrentView()}
           </CardContent>
         </Card>
-
-        {/* Navigation */}
-        {currentStep < totalSteps - 1 && (
-          <div className="flex justify-between mt-6">
-            <Button
-              variant="outline"
-              onClick={handlePrev}
-              disabled={currentStep === 0}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Previous
-            </Button>
-            <Button
-              onClick={handleNext}
-              disabled={!isStepComplete()}
-              className="bg-primary hover:bg-primary/90"
-            >
-              Next
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
