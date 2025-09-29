@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ruler, Users, Download, CheckCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { MeasurementFlow } from "@/components/MeasurementFlow";
+import Navigation from "@/components/Navigation";
+import hoiAnTailorBg from "@/assets/hoi-an-tailor-bg.jpg";
 
 const Index = () => {
   const [showMeasurements, setShowMeasurements] = useState(false);
   const [measurementType, setMeasurementType] = useState<'suit' | 'dress' | null>(null);
+  const [searchParams] = useSearchParams();
 
   const handleStartMeasurements = (type: 'suit' | 'dress') => {
     setMeasurementType(type);
@@ -18,20 +22,34 @@ const Index = () => {
     setMeasurementType(null);
   };
 
+  useEffect(() => {
+    const startParam = searchParams.get('start');
+    if (startParam === 'suit' || startParam === 'dress') {
+      setMeasurementType(startParam);
+      setShowMeasurements(true);
+    }
+  }, [searchParams]);
+
   if (showMeasurements && measurementType) {
     return <MeasurementFlow type={measurementType} onBack={handleBackToHome} />;
   }
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <Navigation />
+      
+      {/* Hero Section with Background */}
+      <section 
+        className="relative min-h-[600px] bg-cover bg-center bg-no-repeat flex items-center"
+        style={{ backgroundImage: `url(${hoiAnTailorBg})` }}
+      >
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
           <div className="mb-8">
-            <h1 className="text-5xl font-bold mb-6 text-foreground">
-              My<span className="text-primary">AI</span>Tailor
+            <h1 className="text-5xl font-bold mb-6 text-white">
+              My<span className="text-craft-gold">AI</span>Tailor
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
               Professional measurements from home. Choose your style, colors, and materials. 
               Download a precision PDF for your tailor.
             </p>
@@ -41,7 +59,7 @@ const Index = () => {
             <Button 
               size="lg" 
               onClick={() => handleStartMeasurements('suit')}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg"
+              className="bg-white text-primary hover:bg-white/90 px-8 py-4 text-lg"
             >
               <Ruler className="mr-2 h-5 w-5" />
               Men's Suits
@@ -50,15 +68,19 @@ const Index = () => {
               size="lg" 
               variant="outline"
               onClick={() => handleStartMeasurements('dress')}
-              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 text-lg"
+              className="bg-white/10 text-white border-white/20 hover:bg-white/20 px-8 py-4 text-lg"
             >
               <Ruler className="mr-2 h-5 w-5" />
               Women's Dresses
             </Button>
           </div>
+        </div>
+      </section>
 
-          {/* Trust Elements */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+      {/* Trust Elements */}
+      <section className="py-16 px-4 bg-background">
+        <div className="max-w-3xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="h-6 w-6 text-primary" />
@@ -84,50 +106,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Process Overview */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="craft-section text-center">
-              <CardHeader>
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Ruler className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <CardTitle>1. Precise Measurements</CardTitle>
-                <CardDescription>
-                  Follow our guided process to capture 12-15 key measurements with visual guides and helpful tips
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="craft-section text-center">
-              <CardHeader>
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <CardTitle>2. Choose Your Style</CardTitle>
-                <CardDescription>
-                  Select from curated suit styles, dress silhouettes, colors, and premium materials in our digital atelier
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="craft-section text-center">
-              <CardHeader>
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Download className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <CardTitle>3. Download PDF</CardTitle>
-                <CardDescription>
-                  Get a professional measurement sheet with your selections, ready to share with any tailor worldwide
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 px-4">
