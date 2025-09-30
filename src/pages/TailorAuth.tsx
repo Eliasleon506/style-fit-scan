@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,9 +25,16 @@ const TailorAuth = () => {
     password: ''
   });
   
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Redirect if already authenticated
+  React.useEffect(() => {
+    if (!loading && user) {
+      navigate('/tailor/dashboard');
+    }
+  }, [user, loading, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -59,7 +67,7 @@ const TailorAuth = () => {
       if (type === 'signup') {
         toast({
           title: "Account created successfully!",
-          description: "Welcome to the tailor portal. You can now set up your profile.",
+          description: "Let's set up your tailor profile.",
         });
       } else {
         toast({
@@ -67,8 +75,8 @@ const TailorAuth = () => {
           description: "You've successfully signed in to your tailor account.",
         });
       }
-
-      navigate('/tailor/dashboard');
+      
+      // Navigation will happen automatically via useEffect when auth state updates
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
     } finally {
