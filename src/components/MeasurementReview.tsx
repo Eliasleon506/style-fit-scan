@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Download, ArrowLeft, User, Calendar } from "lucide-react";
+import { Download, ArrowLeft, User, Calendar, Languages } from "lucide-react";
 import { Measurement } from "./MeasurementFlow";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 interface MeasurementReviewProps {
   type: 'suit' | 'dress';
@@ -21,6 +22,8 @@ export const MeasurementReview = ({
   selectedStyles, 
   onBack 
 }: MeasurementReviewProps) => {
+  const [pdfLanguage, setPdfLanguage] = useState<'en' | 'vi'>('en');
+  
   const measurementsByCategory = Object.values(measurements).reduce((acc, measurement) => {
     if (!acc[measurement.category]) {
       acc[measurement.category] = [];
@@ -28,6 +31,63 @@ export const MeasurementReview = ({
     acc[measurement.category].push(measurement);
     return acc;
   }, {} as Record<string, Measurement[]>);
+
+  const translations = {
+    en: {
+      title: "Custom Tailoring Measurements",
+      orderDate: "Order Date",
+      garmentType: "Garment Type",
+      mensSuit: "Men's Suit",
+      womensDress: "Women's Dress",
+      styleSelections: "Style Selections",
+      measurements: "Measurements",
+      measurement: "Measurement",
+      value: "Value",
+      unit: "Unit",
+      style: "Style",
+      lapel: "Lapel",
+      neckline: "Neckline",
+      color: "Color",
+      material: "Material",
+      lining: "Lining",
+      page: "Page",
+      of: "of",
+      categories: {
+        basic: 'Basic Measurements',
+        torso: 'Torso Measurements',
+        upper: 'Upper Body',
+        lower: 'Lower Body',
+        length: 'Length Measurements',
+      }
+    },
+    vi: {
+      title: "Số Đo May Đo",
+      orderDate: "Ngày Đặt",
+      garmentType: "Loại Trang Phục",
+      mensSuit: "Bộ Vest Nam",
+      womensDress: "Váy Nữ",
+      styleSelections: "Lựa Chọn Kiểu Dáng",
+      measurements: "Số Đo",
+      measurement: "Số Đo",
+      value: "Giá Trị",
+      unit: "Đơn Vị",
+      style: "Kiểu",
+      lapel: "Ve Áo",
+      neckline: "Cổ Áo",
+      color: "Màu",
+      material: "Chất Liệu",
+      lining: "Lót",
+      page: "Trang",
+      of: "của",
+      categories: {
+        basic: 'Số Đo Cơ Bản',
+        torso: 'Số Đo Thân',
+        upper: 'Phần Trên',
+        lower: 'Phần Dưới',
+        length: 'Số Đo Chiều Dài',
+      }
+    }
+  };
 
   const categoryLabels: Record<string, string> = {
     basic: 'Basic Measurements',
@@ -39,19 +99,20 @@ export const MeasurementReview = ({
 
   const handleDownload = () => {
     try {
+      const t = translations[pdfLanguage];
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       
       // Header
       doc.setFontSize(20);
       doc.setFont("helvetica", "bold");
-      doc.text("Custom Tailoring Measurements", pageWidth / 2, 20, { align: "center" });
+      doc.text(t.title, pageWidth / 2, 20, { align: "center" });
       
       // Date and Order Info
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      doc.text(`Order Date: ${formatDate()}`, 14, 35);
-      doc.text(`Garment Type: ${type === 'suit' ? "Men's Suit" : "Women's Dress"}`, 14, 41);
+      doc.text(`${t.orderDate}: ${formatDate()}`, 14, 35);
+      doc.text(`${t.garmentType}: ${type === 'suit' ? t.mensSuit : t.womensDress}`, 14, 41);
       
       let yPosition = 50;
       
@@ -59,19 +120,19 @@ export const MeasurementReview = ({
       if (selectedStyles && Object.keys(selectedStyles).length > 0) {
         doc.setFontSize(14);
         doc.setFont("helvetica", "bold");
-        doc.text("Style Selections", 14, yPosition);
+        doc.text(t.styleSelections, 14, yPosition);
         yPosition += 7;
         
         doc.setFontSize(10);
         doc.setFont("helvetica", "normal");
         
         const styleEntries = [
-          selectedStyles.style && `Style: ${selectedStyles.style.name}`,
-          selectedStyles.lapel && `Lapel: ${selectedStyles.lapel.name}`,
-          selectedStyles.neckline && `Neckline: ${selectedStyles.neckline.name}`,
-          selectedStyles.color && `Color: ${selectedStyles.color.name}`,
-          selectedStyles.material && `Material: ${selectedStyles.material.name}`,
-          selectedStyles.lining && `Lining: ${selectedStyles.lining.name}`,
+          selectedStyles.style && `${t.style}: ${selectedStyles.style.name}`,
+          selectedStyles.lapel && `${t.lapel}: ${selectedStyles.lapel.name}`,
+          selectedStyles.neckline && `${t.neckline}: ${selectedStyles.neckline.name}`,
+          selectedStyles.color && `${t.color}: ${selectedStyles.color.name}`,
+          selectedStyles.material && `${t.material}: ${selectedStyles.material.name}`,
+          selectedStyles.lining && `${t.lining}: ${selectedStyles.lining.name}`,
         ].filter(Boolean);
         
         styleEntries.forEach((entry) => {
@@ -85,7 +146,7 @@ export const MeasurementReview = ({
       // Measurements by Category
       doc.setFontSize(14);
       doc.setFont("helvetica", "bold");
-      doc.text("Measurements", 14, yPosition);
+      doc.text(t.measurements, 14, yPosition);
       yPosition += 7;
       
       Object.entries(categoryLabels).forEach(([category, label]) => {
@@ -95,7 +156,7 @@ export const MeasurementReview = ({
         // Category title
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
-        doc.text(label, 14, yPosition);
+        doc.text(t.categories[category as keyof typeof t.categories], 14, yPosition);
         yPosition += 5;
         
         // Create table data
@@ -107,7 +168,7 @@ export const MeasurementReview = ({
         
         autoTable(doc, {
           startY: yPosition,
-          head: [["Measurement", "Value", "Unit"]],
+          head: [[t.measurement, t.value, t.unit]],
           body: tableData,
           theme: "striped",
           headStyles: { fillColor: [66, 66, 66] },
@@ -131,7 +192,7 @@ export const MeasurementReview = ({
         doc.setFontSize(8);
         doc.setFont("helvetica", "italic");
         doc.text(
-          `Page ${i} of ${pageCount}`,
+          `${t.page} ${i} ${t.of} ${pageCount}`,
           pageWidth / 2,
           doc.internal.pageSize.getHeight() - 10,
           { align: "center" }
@@ -284,6 +345,14 @@ export const MeasurementReview = ({
         </Button>
         
         <div className="flex gap-2">
+          <Button 
+            variant="outline"
+            onClick={() => setPdfLanguage(pdfLanguage === 'en' ? 'vi' : 'en')}
+            className="flex items-center gap-2"
+          >
+            <Languages className="h-4 w-4" />
+            {pdfLanguage === 'en' ? 'Vietnamese' : 'English'}
+          </Button>
           <Button variant="outline">
             Save Draft
           </Button>
@@ -292,7 +361,7 @@ export const MeasurementReview = ({
             className="bg-primary hover:bg-primary/90 flex items-center gap-2"
           >
             <Download className="h-4 w-4" />
-            Download PDF
+            Download PDF ({pdfLanguage === 'en' ? 'EN' : 'VI'})
           </Button>
         </div>
       </div>
