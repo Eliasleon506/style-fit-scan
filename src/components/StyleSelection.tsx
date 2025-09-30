@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Palette, Shirt, Package, Layers, Upload } from "lucide-react";
 import { toast } from "sonner";
+import { Mannequin3D } from "./Mannequin3D";
 
 // Import style images
 import suitTwoPiece from "@/assets/suit-two-piece.jpg";
@@ -184,16 +185,9 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
 
   return (
     <div className="space-y-6 relative">
-      {/* Rotating decorative modal in corner */}
-      <div className="absolute top-0 right-0 w-24 h-24 animate-[spin_20s_linear_infinite]">
-        <Card className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 border-primary/30 shadow-lg">
-          <CardContent className="p-2 flex items-center justify-center h-full">
-            <div className="text-center">
-              <Shirt className="h-8 w-8 mx-auto text-primary mb-1" />
-              <p className="text-xs font-semibold text-primary">Custom Tailoring</p>
-            </div>
-          </CardContent>
-        </Card>
+      {/* 3D Mannequin in corner */}
+      <div className="absolute top-0 right-0 w-32 h-32 rounded-lg overflow-hidden shadow-lg border border-border bg-background z-10">
+        <Mannequin3D />
       </div>
 
       {/* Header */}
