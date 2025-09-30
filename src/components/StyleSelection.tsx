@@ -18,6 +18,10 @@ import dressALine from "@/assets/dress-a-line.jpg";
 import dressSheath from "@/assets/dress-sheath.jpg";
 import dressMermaid from "@/assets/dress-mermaid.jpg";
 import dressBallGown from "@/assets/dress-ball-gown.jpg";
+import necklineScoop from "@/assets/neckline-scoop.jpg";
+import necklineVneck from "@/assets/neckline-vneck.jpg";
+import necklineOffShoulder from "@/assets/neckline-off-shoulder.jpg";
+import necklineHighNeck from "@/assets/neckline-high-neck.jpg";
 
 // Import fabric images
 import fabricWool from "@/assets/fabric-wool.jpg";
@@ -60,10 +64,10 @@ const dressStyles = [
 ];
 
 const dressNecklines = [
-  { id: 'scoop', name: 'Scoop Neck', description: 'Classic rounded neckline' },
-  { id: 'v-neck', name: 'V-Neck', description: 'Elegant V-shaped neckline' },
-  { id: 'off-shoulder', name: 'Off-Shoulder', description: 'Romantic off-shoulder style' },
-  { id: 'high-neck', name: 'High Neck', description: 'Modern high neckline' },
+  { id: 'scoop', name: 'Scoop Neck', description: 'Classic rounded neckline', image: necklineScoop },
+  { id: 'v-neck', name: 'V-Neck', description: 'Elegant V-shaped neckline', image: necklineVneck },
+  { id: 'off-shoulder', name: 'Off-Shoulder', description: 'Romantic off-shoulder style', image: necklineOffShoulder },
+  { id: 'high-neck', name: 'High Neck', description: 'Modern high neckline', image: necklineHighNeck },
 ];
 
 const colors = [
