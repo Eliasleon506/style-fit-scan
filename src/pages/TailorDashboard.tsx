@@ -291,6 +291,80 @@ const TailorDashboard = () => {
               </Card>
             )}
             
+            {profile && (
+              <Card className="border-green-500 bg-green-500/5">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <User className="h-5 w-5 text-green-500" />
+                    <span>Your Profile</span>
+                    <Badge variant="outline" className="ml-auto">Active</Badge>
+                  </CardTitle>
+                  <CardDescription>
+                    This is how customers will see your business
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h3 className="text-xl font-bold">{profile.business_name}</h3>
+                    <p className="text-muted-foreground">{profile.owner_name}</p>
+                  </div>
+                  
+                  {profile.description && (
+                    <p className="text-sm">{profile.description}</p>
+                  )}
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    {profile.phone && (
+                      <div className="flex items-center space-x-2">
+                        <Phone className="h-4 w-4 text-primary" />
+                        <span>{profile.phone}</span>
+                      </div>
+                    )}
+                    {profile.email && (
+                      <div className="flex items-center space-x-2">
+                        <Mail className="h-4 w-4 text-primary" />
+                        <span>{profile.email}</span>
+                      </div>
+                    )}
+                    {profile.address && (
+                      <div className="flex items-center space-x-2">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        <span>{profile.address}{profile.city ? `, ${profile.city}` : ''}</span>
+                      </div>
+                    )}
+                    {profile.experience_years && (
+                      <div className="flex items-center space-x-2">
+                        <Clock className="h-4 w-4 text-primary" />
+                        <span>{profile.experience_years} years experience</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {profile.specialties && profile.specialties.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {profile.specialties.map((specialty, idx) => (
+                        <Badge key={idx} variant="secondary">{specialty}</Badge>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {(profile.website_url || profile.instagram_handle || profile.facebook_page) && (
+                    <div className="flex space-x-3 pt-2">
+                      {profile.website_url && (
+                        <Globe className="h-5 w-5 text-muted-foreground" />
+                      )}
+                      {profile.instagram_handle && (
+                        <Instagram className="h-5 w-5 text-muted-foreground" />
+                      )}
+                      {profile.facebook_page && (
+                        <Facebook className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+            
             <Card>
               <CardHeader>
                 <CardTitle>{profile ? 'Edit Business Profile' : 'Create Your Business Profile'}</CardTitle>
