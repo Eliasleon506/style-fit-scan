@@ -30,16 +30,16 @@ import { z } from 'zod';
 const profileSchema = z.object({
   business_name: z.string().min(1, 'Business name is required').max(100),
   owner_name: z.string().min(1, 'Owner name is required').max(100),
-  phone: z.string().optional(),
-  email: z.string().email('Invalid email').optional().or(z.literal('')),
-  address: z.string().max(255).optional(),
-  city: z.string().max(100).optional(),
-  description: z.string().max(1000).optional(),
-  website_url: z.string().url('Invalid URL').optional().or(z.literal('')),
-  instagram_handle: z.string().max(50).optional(),
-  facebook_page: z.string().max(100).optional(),
-  experience_years: z.number().min(0).max(100).optional(),
-  price_range: z.string().max(100).optional()
+  phone: z.string().nullable().optional(),
+  email: z.string().email('Invalid email').nullable().optional().or(z.literal('')),
+  address: z.string().max(255).nullable().optional(),
+  city: z.string().max(100).nullable().optional(),
+  description: z.string().max(1000).nullable().optional(),
+  website_url: z.string().url('Invalid URL').nullable().optional().or(z.literal('')),
+  instagram_handle: z.string().max(50).nullable().optional(),
+  facebook_page: z.string().max(100).nullable().optional(),
+  experience_years: z.number().min(0).max(100).nullable().optional(),
+  price_range: z.string().max(100).nullable().optional()
 });
 
 interface TailorProfile {
