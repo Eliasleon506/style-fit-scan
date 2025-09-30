@@ -26,6 +26,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import Navigation from '@/components/Navigation';
 
 const profileSchema = z.object({
   business_name: z.string().min(1, 'Business name is required').max(100),
@@ -250,6 +251,7 @@ const TailorDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
