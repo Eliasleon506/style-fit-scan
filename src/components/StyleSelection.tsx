@@ -11,6 +11,10 @@ import { toast } from "sonner";
 import suitTwoPiece from "@/assets/suit-two-piece.jpg";
 import suitThreePiece from "@/assets/suit-three-piece.jpg";
 import suitDinnerJacket from "@/assets/suit-dinner-jacket.jpg";
+import suitSingleBreasted from "@/assets/suit-single-breasted.jpg";
+import suitDoubleBreasted from "@/assets/suit-double-breasted.jpg";
+import suitSlimFit from "@/assets/suit-slim-fit.jpg";
+import suitTuxedo from "@/assets/suit-tuxedo.jpg";
 import lapelNotched from "@/assets/lapel-notched.jpg";
 import lapelPeaked from "@/assets/lapel-peaked.jpg";
 import lapelShawl from "@/assets/lapel-shawl.jpg";
@@ -18,6 +22,12 @@ import dressALine from "@/assets/dress-a-line.jpg";
 import dressSheath from "@/assets/dress-sheath.jpg";
 import dressMermaid from "@/assets/dress-mermaid.jpg";
 import dressBallGown from "@/assets/dress-ball-gown.jpg";
+import dressEmpire from "@/assets/dress-empire.jpg";
+import dressTrumpet from "@/assets/dress-trumpet.jpg";
+import dressColumn from "@/assets/dress-column.jpg";
+import dressTeaLength from "@/assets/dress-tea-length.jpg";
+import dressPrincess from "@/assets/dress-princess.jpg";
+import dressHighLow from "@/assets/dress-high-low.jpg";
 import necklineScoop from "@/assets/neckline-scoop.jpg";
 import necklineVneck from "@/assets/neckline-vneck.jpg";
 import necklineOffShoulder from "@/assets/neckline-off-shoulder.jpg";
@@ -47,6 +57,10 @@ interface StyleSelectionProps {
 const suitStyles = [
   { id: 'two-piece', name: 'Two-Piece', description: 'Classic jacket and trousers', image: suitTwoPiece },
   { id: 'three-piece', name: 'Three-Piece', description: 'Jacket, waistcoat, and trousers', image: suitThreePiece },
+  { id: 'single-breasted', name: 'Single-Breasted', description: 'Modern business style', image: suitSingleBreasted },
+  { id: 'double-breasted', name: 'Double-Breasted', description: 'Bold formal statement', image: suitDoubleBreasted },
+  { id: 'slim-fit', name: 'Slim Fit', description: 'Contemporary tailored cut', image: suitSlimFit },
+  { id: 'tuxedo', name: 'Tuxedo', description: 'Black tie perfection', image: suitTuxedo },
   { id: 'dinner-jacket', name: 'Dinner Jacket', description: 'Formal evening wear', image: suitDinnerJacket },
 ];
 
@@ -58,9 +72,15 @@ const suitLapels = [
 
 const dressStyles = [
   { id: 'a-line', name: 'A-Line', description: 'Classic fitted bodice, flared skirt', image: dressALine },
-  { id: 'sheath', name: 'Sheath', description: 'Sleek and fitted silhouette', image: dressSheath },
-  { id: 'mermaid', name: 'Mermaid', description: 'Fitted through hips, flared bottom', image: dressMermaid },
   { id: 'ball-gown', name: 'Ball Gown', description: 'Full skirt, fitted bodice', image: dressBallGown },
+  { id: 'mermaid', name: 'Mermaid', description: 'Fitted through hips, flared bottom', image: dressMermaid },
+  { id: 'sheath', name: 'Sheath', description: 'Sleek and fitted silhouette', image: dressSheath },
+  { id: 'empire', name: 'Empire Waist', description: 'High waist, flowing skirt', image: dressEmpire },
+  { id: 'trumpet', name: 'Trumpet', description: 'Fit-and-flare elegance', image: dressTrumpet },
+  { id: 'column', name: 'Column', description: 'Straight, sleek silhouette', image: dressColumn },
+  { id: 'tea-length', name: 'Tea-Length', description: 'Elegant midi length', image: dressTeaLength },
+  { id: 'princess', name: 'Princess Cut', description: 'Fitted bodice, full skirt', image: dressPrincess },
+  { id: 'high-low', name: 'High-Low', description: 'Asymmetrical hemline', image: dressHighLow },
 ];
 
 const dressNecklines = [
@@ -256,7 +276,7 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
           {type === 'suit' && (
             <div>
               <h3 className="text-xl font-semibold mb-4">Lapel Style</h3>
-              <div className="grid md:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {suitLapels.map((lapel) => (
                   <StyleCard
                     key={lapel.id}
@@ -272,7 +292,7 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
           {type === 'dress' && (
             <div>
               <h3 className="text-xl font-semibold mb-4">Neckline</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {dressNecklines.map((neckline) => (
                   <StyleCard
                     key={neckline.id}
