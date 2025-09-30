@@ -186,7 +186,7 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
   return (
     <div className="space-y-6 relative">
       {/* 3D Mannequin in corner */}
-      <div className="absolute top-0 right-0 w-32 h-32 rounded-lg overflow-hidden shadow-lg border border-border bg-background z-10">
+      <div className="absolute top-0 right-0 w-32 h-32 rounded-lg overflow-hidden shadow-lg bg-background z-10">
         <Mannequin3D />
       </div>
 
