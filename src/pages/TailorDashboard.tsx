@@ -263,11 +263,24 @@ const TailorDashboard = () => {
           </TabsList>
 
           <TabsContent value="profile" className="space-y-6">
+            {!profile && (
+              <Card className="border-primary bg-primary/5">
+                <CardContent className="pt-6">
+                  <div className="text-center space-y-2">
+                    <h2 className="text-2xl font-bold text-primary">Welcome to Your Tailor Portal!</h2>
+                    <p className="text-muted-foreground">
+                      Let's set up your business profile so customers can find and contact you.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
             <Card>
               <CardHeader>
-                <CardTitle>Business Profile</CardTitle>
+                <CardTitle>{profile ? 'Edit Business Profile' : 'Create Your Business Profile'}</CardTitle>
                 <CardDescription>
-                  Manage your business information and contact details
+                  {profile ? 'Update your business information and contact details' : 'Fill in your business details to get started'}
                 </CardDescription>
               </CardHeader>
               <CardContent>
