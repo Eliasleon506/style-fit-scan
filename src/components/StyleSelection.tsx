@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Palette, Shirt, Package, Layers, Upload } from "lucide-react";
 import { toast } from "sonner";
-import { Mannequin3D } from "./Mannequin3D";
 
 // Import style images
 import suitTwoPiece from "@/assets/suit-two-piece.jpg";
@@ -185,11 +184,6 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
 
   return (
     <div className="space-y-6 relative">
-      {/* 3D Mannequin in corner */}
-      <div className="absolute top-0 right-0 w-32 h-32 rounded-lg overflow-hidden shadow-lg bg-background z-10">
-        <Mannequin3D />
-      </div>
-
       {/* Header */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">Choose Your Style</h2>
