@@ -13,157 +13,157 @@ function MannequinModel() {
   });
 
   const grayMaterial = new THREE.MeshStandardMaterial({ 
-    color: '#888888',
+    color: '#9ca3af',
+    roughness: 0.5,
+    metalness: 0.3
+  });
+
+  const darkGrayMaterial = new THREE.MeshStandardMaterial({ 
+    color: '#6b7280',
     roughness: 0.6,
     metalness: 0.2
   });
 
-  const darkGrayMaterial = new THREE.MeshStandardMaterial({ 
-    color: '#666666',
-    roughness: 0.7,
-    metalness: 0.1
-  });
-
   return (
     <group ref={groupRef}>
-      {/* Head - more detailed */}
-      <mesh position={[0, 1.5, 0]} material={grayMaterial}>
-        <sphereGeometry args={[0.28, 32, 32]} />
+      {/* Head - more proportional */}
+      <mesh position={[0, 1.6, 0]} material={grayMaterial}>
+        <sphereGeometry args={[0.22, 32, 32]} />
       </mesh>
 
-      {/* Facial feature marker */}
-      <mesh position={[0, 1.5, 0.25]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.05, 16, 16]} />
+      {/* Neck - smoother */}
+      <mesh position={[0, 1.35, 0]} material={grayMaterial}>
+        <capsuleGeometry args={[0.08, 0.15, 16, 16]} />
       </mesh>
 
-      {/* Neck */}
-      <mesh position={[0, 1.15, 0]} material={grayMaterial}>
-        <cylinderGeometry args={[0.11, 0.13, 0.25, 16]} />
-      </mesh>
-
-      {/* Upper Chest */}
-      <mesh position={[0, 0.85, 0]} material={grayMaterial}>
-        <boxGeometry args={[0.55, 0.35, 0.28]} />
+      {/* Upper Torso - rounded chest */}
+      <mesh position={[0, 1.1, 0]} scale={[1, 1.2, 0.8]} material={grayMaterial}>
+        <sphereGeometry args={[0.25, 32, 32]} />
       </mesh>
 
       {/* Mid Torso */}
-      <mesh position={[0, 0.5, 0]} material={grayMaterial}>
-        <boxGeometry args={[0.48, 0.3, 0.26]} />
+      <mesh position={[0, 0.8, 0]} scale={[0.9, 1, 0.7]} material={grayMaterial}>
+        <sphereGeometry args={[0.24, 32, 32]} />
       </mesh>
 
-      {/* Lower Torso */}
-      <mesh position={[0, 0.2, 0]} material={grayMaterial}>
-        <boxGeometry args={[0.45, 0.25, 0.24]} />
+      {/* Lower Torso/Abdomen */}
+      <mesh position={[0, 0.52, 0]} scale={[0.85, 0.8, 0.65]} material={grayMaterial}>
+        <sphereGeometry args={[0.22, 32, 32]} />
       </mesh>
 
-      {/* Left Shoulder */}
-      <mesh position={[-0.28, 0.9, 0]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.12, 16, 16]} />
+      {/* Left Shoulder - rounded */}
+      <mesh position={[-0.32, 1.15, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.1, 24, 24]} />
       </mesh>
 
-      {/* Right Shoulder */}
-      <mesh position={[0.28, 0.9, 0]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.12, 16, 16]} />
+      {/* Right Shoulder - rounded */}
+      <mesh position={[0.32, 1.15, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.1, 24, 24]} />
       </mesh>
 
-      {/* Left Arm Upper */}
-      <mesh position={[-0.38, 0.65, 0]} rotation={[0, 0, 0.2]} material={grayMaterial}>
-        <cylinderGeometry args={[0.09, 0.08, 0.45, 16]} />
+      {/* Left Upper Arm */}
+      <mesh position={[-0.4, 0.88, 0]} rotation={[0, 0, 0.1]} material={grayMaterial}>
+        <capsuleGeometry args={[0.07, 0.45, 16, 16]} />
       </mesh>
 
       {/* Left Elbow */}
-      <mesh position={[-0.48, 0.4, 0]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.09, 16, 16]} />
+      <mesh position={[-0.46, 0.6, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.075, 20, 20]} />
       </mesh>
 
-      {/* Left Arm Lower */}
-      <mesh position={[-0.56, 0.15, 0]} rotation={[0, 0, 0.15]} material={grayMaterial}>
-        <cylinderGeometry args={[0.07, 0.06, 0.45, 16]} />
+      {/* Left Forearm */}
+      <mesh position={[-0.5, 0.35, 0]} rotation={[0, 0, 0.05]} material={grayMaterial}>
+        <capsuleGeometry args={[0.06, 0.4, 16, 16]} />
       </mesh>
 
       {/* Left Hand */}
-      <mesh position={[-0.62, -0.1, 0]} material={darkGrayMaterial}>
-        <boxGeometry args={[0.08, 0.12, 0.05]} />
+      <mesh position={[-0.53, 0.1, 0]} scale={[0.8, 1, 0.5]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.08, 16, 16]} />
       </mesh>
 
-      {/* Right Arm Upper */}
-      <mesh position={[0.38, 0.65, 0]} rotation={[0, 0, -0.2]} material={grayMaterial}>
-        <cylinderGeometry args={[0.09, 0.08, 0.45, 16]} />
+      {/* Right Upper Arm */}
+      <mesh position={[0.4, 0.88, 0]} rotation={[0, 0, -0.1]} material={grayMaterial}>
+        <capsuleGeometry args={[0.07, 0.45, 16, 16]} />
       </mesh>
 
       {/* Right Elbow */}
-      <mesh position={[0.48, 0.4, 0]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.09, 16, 16]} />
+      <mesh position={[0.46, 0.6, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.075, 20, 20]} />
       </mesh>
 
-      {/* Right Arm Lower */}
-      <mesh position={[0.56, 0.15, 0]} rotation={[0, 0, -0.15]} material={grayMaterial}>
-        <cylinderGeometry args={[0.07, 0.06, 0.45, 16]} />
+      {/* Right Forearm */}
+      <mesh position={[0.5, 0.35, 0]} rotation={[0, 0, -0.05]} material={grayMaterial}>
+        <capsuleGeometry args={[0.06, 0.4, 16, 16]} />
       </mesh>
 
       {/* Right Hand */}
-      <mesh position={[0.62, -0.1, 0]} material={darkGrayMaterial}>
-        <boxGeometry args={[0.08, 0.12, 0.05]} />
+      <mesh position={[0.53, 0.1, 0]} scale={[0.8, 1, 0.5]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.08, 16, 16]} />
       </mesh>
 
-      {/* Pelvis/Hips */}
-      <mesh position={[0, 0, 0]} material={grayMaterial}>
-        <boxGeometry args={[0.42, 0.22, 0.26]} />
+      {/* Pelvis/Hips - rounded */}
+      <mesh position={[0, 0.28, 0]} scale={[1.1, 0.6, 0.8]} material={grayMaterial}>
+        <sphereGeometry args={[0.22, 32, 32]} />
       </mesh>
 
       {/* Left Hip Joint */}
-      <mesh position={[-0.13, -0.08, 0]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.1, 16, 16]} />
+      <mesh position={[-0.11, 0.12, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.09, 20, 20]} />
       </mesh>
 
       {/* Right Hip Joint */}
-      <mesh position={[0.13, -0.08, 0]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.1, 16, 16]} />
+      <mesh position={[0.11, 0.12, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.09, 20, 20]} />
       </mesh>
 
-      {/* Left Leg Upper (Thigh) */}
-      <mesh position={[-0.13, -0.42, 0]} material={grayMaterial}>
-        <cylinderGeometry args={[0.11, 0.1, 0.65, 16]} />
+      {/* Left Thigh */}
+      <mesh position={[-0.11, -0.18, 0]} material={grayMaterial}>
+        <capsuleGeometry args={[0.09, 0.5, 16, 16]} />
       </mesh>
 
       {/* Left Knee */}
-      <mesh position={[-0.13, -0.75, 0]} material={darkGrayMaterial}>
-        <sphereGeometry args={[0.1, 16, 16]} />
+      <mesh position={[-0.11, -0.52, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.085, 20, 20]} />
       </mesh>
 
-      {/* Left Leg Lower (Shin) */}
-      <mesh position={[-0.13, -1.05, 0]} material={grayMaterial}>
-        <cylinderGeometry args={[0.09, 0.08, 0.55, 16]} />
+      {/* Left Shin */}
+      <mesh position={[-0.11, -0.85, 0]} material={grayMaterial}>
+        <capsuleGeometry args={[0.075, 0.55, 16, 16]} />
+      </mesh>
+
+      {/* Left Ankle */}
+      <mesh position={[-0.11, -1.16, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.07, 16, 16]} />
       </mesh>
 
       {/* Left Foot */}
-      <mesh position={[-0.13, -1.35, 0.08]} material={darkGrayMaterial}>
-        <boxGeometry args={[0.12, 0.08, 0.22]} />
-      </mesh>
-
-      {/* Right Leg Upper (Thigh) */}
-      <mesh position={[0.13, -0.42, 0]} material={grayMaterial}>
-        <cylinderGeometry args={[0.11, 0.1, 0.65, 16]} />
-      </mesh>
-
-      {/* Right Knee */}
-      <mesh position={[0.13, -0.75, 0]} material={darkGrayMaterial}>
+      <mesh position={[-0.11, -1.26, 0.08]} scale={[0.7, 0.5, 1.3]} material={grayMaterial}>
         <sphereGeometry args={[0.1, 16, 16]} />
       </mesh>
 
-      {/* Right Leg Lower (Shin) */}
-      <mesh position={[0.13, -1.05, 0]} material={grayMaterial}>
-        <cylinderGeometry args={[0.09, 0.08, 0.55, 16]} />
+      {/* Right Thigh */}
+      <mesh position={[0.11, -0.18, 0]} material={grayMaterial}>
+        <capsuleGeometry args={[0.09, 0.5, 16, 16]} />
+      </mesh>
+
+      {/* Right Knee */}
+      <mesh position={[0.11, -0.52, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.085, 20, 20]} />
+      </mesh>
+
+      {/* Right Shin */}
+      <mesh position={[0.11, -0.85, 0]} material={grayMaterial}>
+        <capsuleGeometry args={[0.075, 0.55, 16, 16]} />
+      </mesh>
+
+      {/* Right Ankle */}
+      <mesh position={[0.11, -1.16, 0]} material={darkGrayMaterial}>
+        <sphereGeometry args={[0.07, 16, 16]} />
       </mesh>
 
       {/* Right Foot */}
-      <mesh position={[0.13, -1.35, 0.08]} material={darkGrayMaterial}>
-        <boxGeometry args={[0.12, 0.08, 0.22]} />
-      </mesh>
-
-      {/* Spine detail */}
-      <mesh position={[0, 0.55, -0.12]} material={darkGrayMaterial}>
-        <cylinderGeometry args={[0.03, 0.03, 0.8, 8]} />
+      <mesh position={[0.11, -1.26, 0.08]} scale={[0.7, 0.5, 1.3]} material={grayMaterial}>
+        <sphereGeometry args={[0.1, 16, 16]} />
       </mesh>
     </group>
   );
@@ -172,12 +172,13 @@ function MannequinModel() {
 export function Mannequin3D() {
   return (
     <div className="w-full h-full">
-      <Canvas camera={{ position: [0, 0.3, 3.5], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
-        <directionalLight position={[-5, -5, -5]} intensity={0.3} />
+      <Canvas camera={{ position: [0, 0.2, 3.2], fov: 50 }}>
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[3, 5, 5]} intensity={1.2} />
+        <directionalLight position={[-3, -2, -5]} intensity={0.4} />
+        <pointLight position={[0, 2, 2]} intensity={0.5} />
         <MannequinModel />
-        <OrbitControls enableZoom={false} enablePan={false} />
+        <OrbitControls enableZoom={false} enablePan={false} autoRotate={false} />
       </Canvas>
     </div>
   );
