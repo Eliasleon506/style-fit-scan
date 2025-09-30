@@ -18,6 +18,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
+import Navigation from '@/components/Navigation';
 
 interface TailorProfile {
   id: string;
@@ -99,6 +100,7 @@ const TailorDirectory = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
       {/* Header */}
       <header className="bg-card border-b">
         <div className="container mx-auto px-4 py-8">
