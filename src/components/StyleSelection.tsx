@@ -1,8 +1,38 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Palette, Shirt, Package } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Palette, Shirt, Package, Layers, Upload } from "lucide-react";
+import { toast } from "sonner";
+
+// Import style images
+import suitTwoPiece from "@/assets/suit-two-piece.jpg";
+import suitThreePiece from "@/assets/suit-three-piece.jpg";
+import suitDinnerJacket from "@/assets/suit-dinner-jacket.jpg";
+import lapelNotched from "@/assets/lapel-notched.jpg";
+import lapelPeaked from "@/assets/lapel-peaked.jpg";
+import lapelShawl from "@/assets/lapel-shawl.jpg";
+import dressALine from "@/assets/dress-a-line.jpg";
+import dressSheath from "@/assets/dress-sheath.jpg";
+import dressMermaid from "@/assets/dress-mermaid.jpg";
+import dressBallGown from "@/assets/dress-ball-gown.jpg";
+
+// Import fabric images
+import fabricWool from "@/assets/fabric-wool.jpg";
+import fabricLinen from "@/assets/fabric-linen.jpg";
+import fabricCotton from "@/assets/fabric-cotton.jpg";
+import fabricSilk from "@/assets/fabric-silk.jpg";
+import fabricCashmere from "@/assets/fabric-cashmere.jpg";
+import fabricVelvet from "@/assets/fabric-velvet.jpg";
+import fabricTweed from "@/assets/fabric-tweed.jpg";
+
+// Import lining images
+import liningPaisley from "@/assets/lining-paisley.jpg";
+import liningStriped from "@/assets/lining-striped.jpg";
+import liningFloral from "@/assets/lining-floral.jpg";
+import liningSolid from "@/assets/lining-solid.jpg";
 
 interface StyleSelectionProps {
   type: 'suit' | 'dress';
@@ -11,22 +41,22 @@ interface StyleSelectionProps {
 }
 
 const suitStyles = [
-  { id: 'two-piece', name: 'Two-Piece', description: 'Classic jacket and trousers' },
-  { id: 'three-piece', name: 'Three-Piece', description: 'Jacket, waistcoat, and trousers' },
-  { id: 'dinner-jacket', name: 'Dinner Jacket', description: 'Formal evening wear' },
+  { id: 'two-piece', name: 'Two-Piece', description: 'Classic jacket and trousers', image: suitTwoPiece },
+  { id: 'three-piece', name: 'Three-Piece', description: 'Jacket, waistcoat, and trousers', image: suitThreePiece },
+  { id: 'dinner-jacket', name: 'Dinner Jacket', description: 'Formal evening wear', image: suitDinnerJacket },
 ];
 
 const suitLapels = [
-  { id: 'notched', name: 'Notched Lapel', description: 'Traditional business style' },
-  { id: 'peaked', name: 'Peaked Lapel', description: 'Formal and elegant' },
-  { id: 'shawl', name: 'Shawl Lapel', description: 'Smooth curved design' },
+  { id: 'notched', name: 'Notched Lapel', description: 'Traditional business style', image: lapelNotched },
+  { id: 'peaked', name: 'Peaked Lapel', description: 'Formal and elegant', image: lapelPeaked },
+  { id: 'shawl', name: 'Shawl Lapel', description: 'Smooth curved design', image: lapelShawl },
 ];
 
 const dressStyles = [
-  { id: 'a-line', name: 'A-Line', description: 'Classic fitted bodice, flared skirt' },
-  { id: 'sheath', name: 'Sheath', description: 'Sleek and fitted silhouette' },
-  { id: 'mermaid', name: 'Mermaid', description: 'Fitted through hips, flared bottom' },
-  { id: 'ball-gown', name: 'Ball Gown', description: 'Full skirt, fitted bodice' },
+  { id: 'a-line', name: 'A-Line', description: 'Classic fitted bodice, flared skirt', image: dressALine },
+  { id: 'sheath', name: 'Sheath', description: 'Sleek and fitted silhouette', image: dressSheath },
+  { id: 'mermaid', name: 'Mermaid', description: 'Fitted through hips, flared bottom', image: dressMermaid },
+  { id: 'ball-gown', name: 'Ball Gown', description: 'Full skirt, fitted bodice', image: dressBallGown },
 ];
 
 const dressNecklines = [
@@ -43,19 +73,40 @@ const colors = [
   { id: 'burgundy', name: 'Burgundy', hex: '#7c2d12' },
   { id: 'forest', name: 'Forest Green', hex: '#14532d' },
   { id: 'cream', name: 'Cream', hex: '#fef3c7' },
+  { id: 'light-gray', name: 'Light Gray', hex: '#d1d5db' },
+  { id: 'tan', name: 'Tan', hex: '#d2b48c' },
+  { id: 'midnight', name: 'Midnight Blue', hex: '#191970' },
+  { id: 'olive', name: 'Olive', hex: '#6b7c3a' },
+  { id: 'brown', name: 'Brown', hex: '#8b4513' },
+  { id: 'wine', name: 'Wine', hex: '#722f37' },
+  { id: 'slate', name: 'Slate', hex: '#475569' },
+  { id: 'beige', name: 'Beige', hex: '#f5f5dc' },
 ];
 
 const materials = [
-  { id: 'wool-120s', name: "120's Wool", description: 'Premium wool, perfect drape', season: 'year-round' },
-  { id: 'wool-150s', name: "150's Wool", description: 'Luxury super-fine wool', season: 'year-round' },
-  { id: 'linen', name: 'Pure Linen', description: 'Breathable and natural', season: 'spring/summer' },
-  { id: 'cotton', name: 'Fine Cotton', description: 'Crisp and comfortable', season: 'spring/summer' },
-  { id: 'silk', name: 'Silk Blend', description: 'Luxurious and smooth', season: 'year-round' },
-  { id: 'cashmere', name: 'Cashmere Blend', description: 'Ultimate luxury and warmth', season: 'fall/winter' },
+  { id: 'wool-120s', name: "120's Wool", description: 'Premium wool, perfect drape', season: 'year-round', image: fabricWool },
+  { id: 'wool-150s', name: "150's Super Wool", description: 'Luxury super-fine wool', season: 'year-round', image: fabricWool },
+  { id: 'linen', name: 'Pure Linen', description: 'Breathable and natural', season: 'spring/summer', image: fabricLinen },
+  { id: 'cotton', name: 'Fine Cotton', description: 'Crisp and comfortable', season: 'spring/summer', image: fabricCotton },
+  { id: 'silk', name: 'Silk Blend', description: 'Luxurious and smooth', season: 'year-round', image: fabricSilk },
+  { id: 'cashmere', name: 'Cashmere Blend', description: 'Ultimate luxury and warmth', season: 'fall/winter', image: fabricCashmere },
+  { id: 'velvet', name: 'Velvet', description: 'Rich texture, elegant drape', season: 'fall/winter', image: fabricVelvet },
+  { id: 'tweed', name: 'Tweed', description: 'Classic textured wool', season: 'fall/winter', image: fabricTweed },
+  { id: 'linen-cotton', name: 'Linen-Cotton Blend', description: 'Best of both worlds', season: 'spring/summer', image: fabricLinen },
+  { id: 'wool-silk', name: 'Wool-Silk Blend', description: 'Refined with natural sheen', season: 'year-round', image: fabricWool },
+];
+
+const liningDesigns = [
+  { id: 'paisley', name: 'Paisley Pattern', description: 'Classic intricate design', image: liningPaisley },
+  { id: 'striped', name: 'Striped', description: 'Bold vertical stripes', image: liningStriped },
+  { id: 'floral', name: 'Floral', description: 'Elegant flower pattern', image: liningFloral },
+  { id: 'solid', name: 'Solid Color', description: 'Timeless simplicity', image: liningSolid },
 ];
 
 export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSelectionProps) => {
-  const [activeSection, setActiveSection] = useState<'style' | 'color' | 'material'>('style');
+  const [activeSection, setActiveSection] = useState<'style' | 'color' | 'material' | 'lining'>('style');
+  const [customLiningPreview, setCustomLiningPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const updateSelection = (category: string, value: any) => {
     onStyleChange({
@@ -64,13 +115,44 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
     });
   };
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size must be less than 5MB");
+        return;
+      }
+      if (!file.type.startsWith('image/')) {
+        toast.error("Please upload an image file");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setCustomLiningPreview(result);
+        updateSelection('lining', { id: 'custom', name: 'Custom Upload', image: result });
+        toast.success("Custom lining uploaded successfully");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const StyleCard = ({ item, isSelected, onClick }: any) => (
     <Card 
-      className={`cursor-pointer transition-all hover:shadow-md ${
+      className={`cursor-pointer transition-all hover:shadow-md overflow-hidden ${
         isSelected ? 'ring-2 ring-primary bg-primary/5' : 'hover:border-primary/50'
       }`}
       onClick={onClick}
     >
+      {item.image && (
+        <div className="aspect-square overflow-hidden">
+          <img 
+            src={item.image} 
+            alt={item.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
       <CardContent className="p-4">
         <h3 className="font-semibold mb-1">{item.name}</h3>
         <p className="text-sm text-muted-foreground">{item.description}</p>
@@ -85,16 +167,16 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
 
   const ColorCard = ({ color, isSelected, onClick }: any) => (
     <Card 
-      className={`cursor-pointer transition-all hover:shadow-md ${
+      className={`cursor-pointer transition-all hover:shadow-md overflow-hidden ${
         isSelected ? 'ring-2 ring-primary' : 'hover:border-primary/50'
       }`}
       onClick={onClick}
     >
-      <CardContent className="p-4 text-center">
-        <div 
-          className="w-12 h-12 rounded-full mx-auto mb-2 border-2 border-border"
-          style={{ backgroundColor: color.hex }}
-        />
+      <div 
+        className="h-24 w-full"
+        style={{ backgroundColor: color.hex }}
+      />
+      <CardContent className="p-3 text-center">
         <h3 className="font-medium text-sm">{color.name}</h3>
       </CardContent>
     </Card>
@@ -111,7 +193,7 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
       </div>
 
       {/* Section Navigation */}
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2 flex-wrap">
         <Button
           variant={activeSection === 'style' ? 'default' : 'outline'}
           onClick={() => setActiveSection('style')}
@@ -136,6 +218,16 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
           <Package className="h-4 w-4" />
           Material
         </Button>
+        {type === 'suit' && (
+          <Button
+            variant={activeSection === 'lining' ? 'default' : 'outline'}
+            onClick={() => setActiveSection('lining')}
+            className="flex items-center gap-2"
+          >
+            <Layers className="h-4 w-4" />
+            Lining
+          </Button>
+        )}
       </div>
 
       {/* Style Selection */}
@@ -225,6 +317,62 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
         </div>
       )}
 
+      {/* Lining Selection (Suits only) */}
+      {activeSection === 'lining' && type === 'suit' && (
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Lining Design</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {liningDesigns.map((lining) => (
+                <StyleCard
+                  key={lining.id}
+                  item={lining}
+                  isSelected={selectedStyles.lining?.id === lining.id}
+                  onClick={() => updateSelection('lining', lining)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t pt-6">
+            <h3 className="text-xl font-semibold mb-4">Or Upload Your Own Design</h3>
+            <Card className="border-dashed">
+              <CardContent className="p-6">
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  <Upload className="h-12 w-12 text-muted-foreground" />
+                  <div className="text-center">
+                    <p className="text-sm font-medium mb-1">Upload custom lining image</p>
+                    <p className="text-xs text-muted-foreground">JPG, PNG up to 5MB</p>
+                  </div>
+                  <Input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <Button 
+                    onClick={() => fileInputRef.current?.click()}
+                    variant="outline"
+                  >
+                    Choose File
+                  </Button>
+                  {customLiningPreview && (
+                    <div className="mt-4">
+                      <img 
+                        src={customLiningPreview} 
+                        alt="Custom lining preview"
+                        className="max-w-xs rounded-lg border-2 border-primary"
+                      />
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
+
       {/* Selection Summary */}
       {Object.keys(selectedStyles).length > 0 && (
         <Card className="bg-muted/50">
@@ -247,6 +395,9 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
               )}
               {selectedStyles.material && (
                 <Badge variant="outline">{selectedStyles.material.name}</Badge>
+              )}
+              {selectedStyles.lining && (
+                <Badge variant="outline">{selectedStyles.lining.name}</Badge>
               )}
             </div>
           </CardContent>
