@@ -29,9 +29,11 @@ const TailorAuth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated (but wait for loading to complete)
   React.useEffect(() => {
-    if (!loading && user) {
+    if (loading) return; // Wait for auth state to be determined
+    
+    if (user) {
       navigate('/tailor/dashboard');
     }
   }, [user, loading, navigate]);
