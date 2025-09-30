@@ -14,7 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      customer_inquiries: {
+        Row: {
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          message: string
+          preferred_contact: string | null
+          service_type: string
+          status: string | null
+          tailor_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          id?: string
+          message: string
+          preferred_contact?: string | null
+          service_type: string
+          status?: string | null
+          tailor_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          id?: string
+          message?: string
+          preferred_contact?: string | null
+          service_type?: string
+          status?: string | null
+          tailor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_inquiries_tailor_id_fkey"
+            columns: ["tailor_id"]
+            isOneToOne: false
+            referencedRelation: "tailor_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      tailor_profiles: {
+        Row: {
+          address: string | null
+          business_name: string
+          city: string | null
+          country: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          experience_years: number | null
+          facebook_page: string | null
+          id: string
+          instagram_handle: string | null
+          languages: string[] | null
+          latitude: number | null
+          longitude: number | null
+          owner_name: string
+          phone: string | null
+          price_range: string | null
+          specialties: string[] | null
+          updated_at: string
+          user_id: string
+          website_url: string | null
+          working_hours: Json | null
+        }
+        Insert: {
+          address?: string | null
+          business_name: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          experience_years?: number | null
+          facebook_page?: string | null
+          id?: string
+          instagram_handle?: string | null
+          languages?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          owner_name: string
+          phone?: string | null
+          price_range?: string | null
+          specialties?: string[] | null
+          updated_at?: string
+          user_id: string
+          website_url?: string | null
+          working_hours?: Json | null
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          experience_years?: number | null
+          facebook_page?: string | null
+          id?: string
+          instagram_handle?: string | null
+          languages?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          owner_name?: string
+          phone?: string | null
+          price_range?: string | null
+          specialties?: string[] | null
+          updated_at?: string
+          user_id?: string
+          website_url?: string | null
+          working_hours?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

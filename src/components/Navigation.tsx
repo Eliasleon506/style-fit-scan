@@ -55,6 +55,18 @@ const Navigation = () => {
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link 
+                    to="/tailors" 
+                    className={`px-4 py-2 text-sm font-medium transition-colors hover:text-primary ${
+                      location.pathname === '/tailors' ? 'text-primary' : 'text-muted-foreground'
+                    }`}
+                  >
+                    Find Tailors
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
