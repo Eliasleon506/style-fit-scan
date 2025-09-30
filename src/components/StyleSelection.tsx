@@ -183,7 +183,19 @@ export const StyleSelection = ({ type, selectedStyles, onStyleChange }: StyleSel
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Rotating decorative modal in corner */}
+      <div className="absolute top-0 right-0 w-24 h-24 animate-[spin_20s_linear_infinite]">
+        <Card className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 border-primary/30 shadow-lg">
+          <CardContent className="p-2 flex items-center justify-center h-full">
+            <div className="text-center">
+              <Shirt className="h-8 w-8 mx-auto text-primary mb-1" />
+              <p className="text-xs font-semibold text-primary">Custom Tailoring</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Header */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-2">Choose Your Style</h2>
