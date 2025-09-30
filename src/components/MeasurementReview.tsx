@@ -4,6 +4,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Download, ArrowLeft, User, Calendar } from "lucide-react";
 import { Measurement } from "./MeasurementFlow";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { toast } from "@/hooks/use-toast";
 
 interface MeasurementReviewProps {
   type: 'suit' | 'dress';
@@ -35,9 +38,122 @@ export const MeasurementReview = ({
   };
 
   const handleDownload = () => {
-    // This would generate and download a PDF
-    // For now, we'll just show a success message
-    alert('PDF generation will be implemented with backend integration');
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      
+      // Header
+      doc.setFontSize(20);
+      doc.setFont("helvetica", "bold");
+      doc.text("Custom Tailoring Measurements", pageWidth / 2, 20, { align: "center" });
+      
+      // Date and Order Info
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Order Date: ${formatDate()}`, 14, 35);
+      doc.text(`Garment Type: ${type === 'suit' ? "Men's Suit" : "Women's Dress"}`, 14, 41);
+      
+      let yPosition = 50;
+      
+      // Style Selections
+      if (selectedStyles && Object.keys(selectedStyles).length > 0) {
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("Style Selections", 14, yPosition);
+        yPosition += 7;
+        
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        
+        const styleEntries = [
+          selectedStyles.style && `Style: ${selectedStyles.style.name}`,
+          selectedStyles.lapel && `Lapel: ${selectedStyles.lapel.name}`,
+          selectedStyles.neckline && `Neckline: ${selectedStyles.neckline.name}`,
+          selectedStyles.color && `Color: ${selectedStyles.color.name}`,
+          selectedStyles.material && `Material: ${selectedStyles.material.name}`,
+          selectedStyles.lining && `Lining: ${selectedStyles.lining.name}`,
+        ].filter(Boolean);
+        
+        styleEntries.forEach((entry) => {
+          doc.text(entry as string, 14, yPosition);
+          yPosition += 6;
+        });
+        
+        yPosition += 5;
+      }
+      
+      // Measurements by Category
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Measurements", 14, yPosition);
+      yPosition += 7;
+      
+      Object.entries(categoryLabels).forEach(([category, label]) => {
+        const categoryMeasurements = measurementsByCategory[category];
+        if (!categoryMeasurements || categoryMeasurements.length === 0) return;
+        
+        // Category title
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.text(label, 14, yPosition);
+        yPosition += 5;
+        
+        // Create table data
+        const tableData = categoryMeasurements.map((measurement) => [
+          measurement.label,
+          measurement.value,
+          measurement.unit,
+        ]);
+        
+        autoTable(doc, {
+          startY: yPosition,
+          head: [["Measurement", "Value", "Unit"]],
+          body: tableData,
+          theme: "striped",
+          headStyles: { fillColor: [66, 66, 66] },
+          margin: { left: 14, right: 14 },
+          styles: { fontSize: 9 },
+        });
+        
+        yPosition = (doc as any).lastAutoTable.finalY + 10;
+        
+        // Check if we need a new page
+        if (yPosition > 250) {
+          doc.addPage();
+          yPosition = 20;
+        }
+      });
+      
+      // Footer
+      const pageCount = doc.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "italic");
+        doc.text(
+          `Page ${i} of ${pageCount}`,
+          pageWidth / 2,
+          doc.internal.pageSize.getHeight() - 10,
+          { align: "center" }
+        );
+      }
+      
+      // Save the PDF
+      const fileName = `measurements-${type}-${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(fileName);
+      
+      toast({
+        title: "PDF Downloaded",
+        description: "Your measurement PDF has been generated successfully.",
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatDate = () => {
